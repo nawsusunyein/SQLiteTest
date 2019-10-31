@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
         location = (EditText) findViewById(R.id.txt_location);
         designation = (EditText) findViewById(R.id.txt_designation);
         button = (Button) findViewById(R.id.btn_save);
+        Button btnDeleteUser = (Button) findViewById(R.id.btn_delete);
+        Button btnUpdateUser = (Button) findViewById(R.id.btn_update);
+
+        final DbHandler dbHandler = new DbHandler(MainActivity.this);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,14 +36,43 @@ public class MainActivity extends AppCompatActivity {
                 String username = name.getText().toString();
                 String userLoc = location.getText().toString();
                 String userDesignation = designation.getText().toString();
-                DbHandler dbHandler = new DbHandler(MainActivity.this);
                 dbHandler.insertUserDetailsInformation(username,userLoc,userDesignation);
-                intent = new Intent(MainActivity.this,DetailsActivity.class);
-                startActivity(intent);
-
-                Toast.makeText(MainActivity.this,"Details inserted successfully",Toast.LENGTH_LONG).show();
+                goToDetailsScreen();
+                showMessage("Details inserted successfully");
             }
         });
 
+        btnDeleteUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = name.getText().toString();
+                dbHandler.deleteUserByUserName(username);
+                goToDetailsScreen();
+                showMessage("Deleted successfully");
+            }
+        });
+
+        btnUpdateUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = name.getText().toString();
+                String userLoc = location.getText().toString();
+                String userDesign = designation.getText().toString();
+                dbHandler.updateUserByUsername(username,userLoc,userDesign);
+                goToDetailsScreen();
+                showMessage("Updated successfully");
+
+            }
+        });
+
+    }
+
+    private void goToDetailsScreen(){
+        intent = new Intent(MainActivity.this,DetailsActivity.class);
+        startActivity(intent);
+    }
+
+    private void showMessage(String msgStatus){
+        Toast.makeText(MainActivity.this,msgStatus,Toast.LENGTH_LONG).show();
     }
 }

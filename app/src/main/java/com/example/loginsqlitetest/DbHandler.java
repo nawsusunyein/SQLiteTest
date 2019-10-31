@@ -66,4 +66,20 @@ public class DbHandler extends SQLiteOpenHelper {
         }
         return userList;
     }
+
+    //Delete users
+    public void deleteUserByUserName(String username){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_Users,"name=?",new String[]{username.toString()});
+        db.close();
+    }
+
+    public void updateUserByUsername(String username,String location,String designation){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cValues = new ContentValues();
+        cValues.put(KEY_LOC,location);
+        cValues.put(KEY_DESG,designation);
+        db.update(TABLE_Users,cValues,"name=?",new String[]{username.toString()});
+        db.close();
+    }
 }
